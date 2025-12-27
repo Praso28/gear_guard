@@ -21,14 +21,19 @@ const corsOrigins = process.env.CORS_ORIGIN
     ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
     : ['http://localhost:3000'];
 
+console.log('🌐 CORS Origins configured:', corsOrigins);
+
 app.use(
     cors({
         origin: (origin, callback) => {
+            console.log('🔍 Request from origin:', origin);
             // Allow requests with no origin (mobile apps, curl, etc.)
             if (!origin) return callback(null, true);
             if (corsOrigins.includes(origin) || corsOrigins.includes('*')) {
+                console.log('✅ CORS allowed for:', origin);
                 return callback(null, true);
             }
+            console.log('❌ CORS blocked for:', origin);
             return callback(new Error('Not allowed by CORS'));
         },
         credentials: true,
